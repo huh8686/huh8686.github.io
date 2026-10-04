@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+import 'katex/dist/katex.min.css';
+
+type Props = {
+  title: string;
+  description: string;
+};
+
+const { title, description } = Astro.props;
+const pageTitle = title === '3D vision paper notes'
+  ? title
+  : `${title} · 3D vision notes`;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip" href="#content">본문으로</a>
+    <header>
+      <a class="brand" href="/">yoonseok huh · notes</a>
+      <nav aria-label="사이트">
+        <a href="/papers">노트</a>
+        <a href="/topics">주제</a>
+        <a href="/about">소개</a>
+      </nav>
+    </header>
+    <main id="content">
+      <slot />
+    </main>
+    <footer>
+      <p>논문을 읽고, 이해한 것과 아직 빈 곳을 같은 형식으로 남깁니다.</p>
+    </footer>
+  </body>
+</html>

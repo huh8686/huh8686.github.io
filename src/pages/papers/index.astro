@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import NoteList from '../../components/NoteList.astro';
+import { getCollection } from 'astro:content';
+
+const notes = (await getCollection('papers', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Base title="노트" description="3D vision 논문 노트 목록">
+  <h1>노트</h1>
+  <p class="lede">읽은 순서와 상관없이, 정리된 노트만 모읍니다. 주제는 네 축 중 하나입니다.</p>
+  {notes.length > 0 ? (
+    <NoteList notes={notes} />
+  ) : (
+    <p class="lede">아직 공개된 노트가 없습니다.</p>
+  )}
+</Base>

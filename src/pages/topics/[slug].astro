@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import NoteList from '../../components/NoteList.astro';
+import { getCollection } from 'astro:content';
+import { topicIds, getTopic, type TopicId } from '../../topics';
+
+export function getStaticPaths() {
+  return topicIds.map((id) => ({ params: { slug: id } }));
+}
+
+const { slug } = Astro.params;
+const topic = getTopic(slug as TopicId);
+const notes = (
+  await getCollection(
+    'papers',
+    ({ data }) => !data.draft && data.topic === topic.id,
+  )
+).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base title={topic.title} description={topic.blurb}>
+  <p class="cite">{topic.kicker}</p>
+  <h1>{topic.title}</h1>
+  <p class="lede">{topic.blurb}</p>
+  <h2 class="section-title">여기에 두는 것</h2>
+  <ul class="includes">
+    {topic.includes.map((item) => <li>{item}</li>)}
+  </ul>
+  <h2 class="section-title">노트</h2>
+  {notes.length > 0 ? (
+    <NoteList notes={notes} />
+  ) : (
+    <p class="lede">이 축의 노트는 아직 없습니다.</p>
+  )}
+</Base>
+
+<style>
+  .includes {
+    margin: 0 0 32px;
+    padding-left: 18px;
+    color: var(--muted);
+  }
+  .includes li + li {
+    margin-top: 4px;
+  }
+</style>

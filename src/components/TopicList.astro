@@ -1,0 +1,64 @@
+---
+import { topics } from '../topics';
+
+type Props = {
+  compact?: boolean;
+};
+
+const { compact = false } = Astro.props;
+---
+
+<ul class:list={['topics', compact && 'compact']}>
+  {topics.map((topic) => (
+    <li>
+      <a href={`/topics/${topic.id}`}>
+        <span class="kicker">{topic.kicker}</span>
+        <strong>{topic.title}</strong>
+        {!compact && <p>{topic.blurb}</p>}
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .topics {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .topics.compact {
+    gap: 0;
+  }
+  a {
+    display: grid;
+    gap: 4px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+  }
+  .topics:not(.compact) a {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 16px;
+  }
+  .topics.compact li:first-child a {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--mark);
+  }
+  strong {
+    font-weight: 500;
+  }
+  p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+</style>
